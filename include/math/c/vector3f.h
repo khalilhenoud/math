@@ -142,7 +142,7 @@ equal_to_v3f(const vector3f* lhs, const vector3f* rhs)
 {
   vector3f vec;
   vector3f_set_diff_v3f(&vec, lhs, rhs);
-  return nextafterf(length_squared_v3f(&vec), 0.f) == 0.f;
+  return IS_ZERO_LP(length_squared_v3f(&vec));
 }
 
 ////////////////////////////////////////////////////////////////////////////////

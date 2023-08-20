@@ -162,7 +162,7 @@ inline
 void
 get_quatf_axis_angle(const quatf* src, vector3f* axis, float* angle_radian)
 {
-  if (nextafterf(fabs(src->data[QUAT_S]), 1.f) == 1.f) {
+  if (IS_SAME_LP(fabs(src->data[QUAT_S]), 1.f)) {
     // no rotation.
     *angle_radian = 0.f;
     vector3f_set_3f(axis, 0.f, 0.f, 1.f);
