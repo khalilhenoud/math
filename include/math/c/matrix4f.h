@@ -39,7 +39,7 @@ enum {
 } M4_RC_XX;
 
 typedef 
-struct {
+struct matrix4f {
   float data[16];
 } matrix4f;
 
