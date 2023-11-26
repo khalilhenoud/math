@@ -32,6 +32,7 @@ extern "C" {
 #define TO_RADIANS(degrees) ((degrees) / 180.f * K_PI)
 #define TO_DEGREES(radians) ((radians) / K_PI * 180.f)
 
+#define EPSILON_FLOAT_MIN_PRECISION 1e-2
 #define EPSILON_FLOAT_LOW_PRECISION 1e-4
 #define EPSILON_FLOAT_MED_PRECISION 1e-6
 
