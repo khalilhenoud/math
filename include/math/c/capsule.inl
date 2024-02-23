@@ -58,11 +58,11 @@ classify_sphere_capsule(
     }
   } 
 
-  return SPHERES_DISTINCT;
+  return SPHERE_CAPSULE_DISTINCT;
 }
 
 inline
-int32_t
+segments_classification_t
 classify_capsules_segments(
   const capsule_t *source, 
   const capsule_t *target, 
