@@ -152,6 +152,23 @@ classify_capsule_face(
   vector3f* penetration,
   point3f* sphere_center);
 
+inline
+float
+get_capsule_face_distance(
+  const capsule_t* capsule, 
+  const face_t* face, 
+  const vector3f* normal);
+
+inline
+float
+find_sphere_face_intersection_time(
+  sphere_t sphere, 
+  face_t* face,
+  vector3f* normal,
+  const vector3f displacement,
+  const uint32_t max_iteration,
+  const float limit);
+
 #include "face.inl"
 
 #ifdef __cplusplus
