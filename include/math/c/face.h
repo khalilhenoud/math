@@ -141,6 +141,16 @@ enum capsule_face_classification_t {
   CAPSULE_FACE_COUNT
 } capsule_face_classification_t;
 
+inline
+void
+extrude_capsule_along_face_normal(
+  const capsule_t* capsule,
+  const face_t* face,
+  const vector3f* normal,
+  const segment_t* segment,
+  const point3f* intersection,
+  vector3f* penetration);
+
 // NOTE: as_plane affects how the penetration is calculated.
 inline
 capsule_face_classification_t
@@ -159,12 +169,26 @@ get_capsule_face_distance(
   const face_t* face, 
   const vector3f* normal);
 
+// call this function to find the initial toi. the sphere must be in non-solid
+// at t=0 and colliding at t=1. the function will return the toi between 0 and 1
 inline
 float
 find_sphere_face_intersection_time(
   sphere_t sphere, 
-  face_t* face,
-  vector3f* normal,
+  const face_t* face,
+  const vector3f* normal,
+  const vector3f displacement,
+  const uint32_t max_iteration,
+  const float limit);
+
+// call this function to find the initial toi. the capsule must be in non-solid
+// at t=0 and colliding at t=1. the function will return the toi between 0 and 1
+inline
+float
+find_capsule_face_intersection_time(
+  capsule_t capsule,
+  const face_t* face, 
+  const vector3f* normal,
   const vector3f displacement,
   const uint32_t max_iteration,
   const float limit);
