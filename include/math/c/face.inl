@@ -395,8 +395,9 @@ get_sphere_face_distance(
     }
   }
 
+  distance = fabs(distance);
   distance -= sphere->radius;
-  distance = distance < 0.f ? 0.f : distance;
+  distance = fmax(distance, 0.f);
   return distance;
 }
 
