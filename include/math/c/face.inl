@@ -791,3 +791,31 @@ find_capsule_face_intersection_time(
     return start;
   }
 }
+
+inline
+planes_classification_t
+classify_planes(
+  const face_t* plane0,
+  const vector3f* normal0,
+  const face_t* plane1,
+  const vector3f* normal1)
+{
+  assert(plane0 && normal0 && plane1 && normal1);
+
+  {
+    float dot = dot_product_v3f(normal0, normal1);
+    float abs_dot = fabs(dot);
+    
+    if (IS_SAME_LP(abs_dot, 1.f)) {
+      int32_t opposite = IS_SAME_LP(dot, -1.f);
+      float distance = get_point_distance(plane0, normal0, plane1->points);
+
+      if (IS_ZERO_LP(distance))
+        return opposite ? PLANES_COLINEAR_OPPOSITE_FACING : PLANES_COLINEAR;
+      else
+        return opposite ? PLANES_PARALLEL_OPPOSITE_FACING : PLANES_PARALLEL;
+    }
+
+    return PLANES_DISTINCT;
+  }
+}

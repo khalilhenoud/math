@@ -193,6 +193,26 @@ find_capsule_face_intersection_time(
   const uint32_t max_iteration,
   const float limit);
 
+typedef
+enum planes_classification_t {
+  PLANES_COLINEAR,
+  PLANES_COLINEAR_OPPOSITE_FACING,
+  PLANES_PARALLEL,
+  PLANES_PARALLEL_OPPOSITE_FACING,
+  PLANES_DISTINCT,
+  PLANES_COUNT
+} planes_classification_t;
+
+// NOTE: faces are treated as planes in this context and normals are assumed to
+// be normalized.
+inline
+planes_classification_t
+classify_planes(
+  const face_t* plane0,
+  const vector3f* normal0,
+  const face_t* plane1,
+  const vector3f* normal1);
+
 #include "face.inl"
 
 #ifdef __cplusplus
