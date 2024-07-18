@@ -179,11 +179,11 @@ diff_v3f(const vector3f* lhs, const vector3f* rhs)
 
 inline
 void
-diff_set_v3f(vector3f* dst, const vector3f* rhs)
+diff_set_v3f(vector3f* dst, const vector3f* sub)
 {
-  dst->data[0] -= rhs->data[0];
-  dst->data[1] -= rhs->data[1];
-  dst->data[2] -= rhs->data[2];
+  dst->data[0] -= sub->data[0];
+  dst->data[1] -= sub->data[1];
+  dst->data[2] -= sub->data[2];
 }
 
 inline
