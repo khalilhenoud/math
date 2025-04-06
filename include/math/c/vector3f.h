@@ -21,7 +21,7 @@ extern "C" {
 
 
 typedef
-struct {
+struct vector3f {
   float data[3];
 } vector3f;
 
