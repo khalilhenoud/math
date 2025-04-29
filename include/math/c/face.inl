@@ -368,15 +368,17 @@ classify_sphere_face(
 inline
 float
 get_sphere_face_distance(
-  const sphere_t* sphere, 
-  const face_t* face, 
-  const vector3f* normal)
+  const sphere_t *sphere, 
+  const face_t *face, 
+  const vector3f *normal,
+  vector3f *direction)
 {
   float distance = 0.f;
+  *direction = mult_v3f(normal, -1.f);
   vector3f projected = get_point_projection(
-    face, 
-    normal, 
-    &sphere->center, 
+    face,
+    normal,
+    &sphere->center,
     &distance);
 
   {
@@ -392,6 +394,9 @@ get_sphere_face_distance(
     if (classification != COPLANAR_POINT_ON_OR_INSIDE) {
       vector3f from_to = diff_v3f(&closest_on_face, &sphere->center);
       distance = length_v3f(&from_to);
+
+      *direction = mult_v3f(&from_to, -1.f);
+      normalize_set_v3f(direction);
     }
   }
 
@@ -696,9 +701,10 @@ classify_capsule_face(
 inline
 float
 get_capsule_face_distance(
-  const capsule_t* capsule, 
-  const face_t* face, 
-  const vector3f* normal)
+  const capsule_t *capsule, 
+  const face_t *face, 
+  const vector3f *normal,
+  vector3f *direction)
 {
   vector3f penetration;
   point3f sphere_center;
@@ -706,6 +712,7 @@ get_capsule_face_distance(
     classify_capsule_face(
       capsule, face, normal, 0, &penetration, &sphere_center);
   
+  direction->data[0] = direction->data[1] = direction->data[2] = 0.f;
   if (classify != CAPSULE_FACE_NO_COLLISION) 
     return 0.f;
 
@@ -713,83 +720,52 @@ get_capsule_face_distance(
     sphere_t sphere;
     sphere.center = sphere_center;
     sphere.radius = capsule->radius;
-    return get_sphere_face_distance(&sphere, face, normal);
-  }
-}
-
-inline
-float
-find_sphere_face_intersection_time(
-  sphere_t sphere, 
-  const face_t* face,
-  const vector3f* normal,
-  const vector3f displacement,
-  const uint32_t max_iteration,
-  const float limit)
-{
-  point3f starting_position = sphere.center;
-
-  {
-    float start = 0.f, end = 1.f, mid_point;
-    uint32_t iteration = 0;
-    vector3f penetration;
-    sphere_face_classification_t classification;
-    vector3f scaled_displacement;
-    float distance = get_sphere_face_distance(&sphere, face, normal);
-
-    while (distance > limit && ++iteration < max_iteration) {
-      mid_point = start + (end - start) / 2.f;
-      scaled_displacement = mult_v3f(&displacement, mid_point);
-      sphere.center = add_v3f(&starting_position, &scaled_displacement);
-      classification = classify_sphere_face(
-        &sphere, face, normal, 0, &penetration);
-      if (classification == SPHERE_FACE_NO_COLLISION) {
-        start = mid_point;
-        distance = get_sphere_face_distance(&sphere, face, normal);
-      } else
-        end = mid_point;
-    } 
-
-    return start;
+    return get_sphere_face_distance(&sphere, face, normal, direction);
   }
 }
 
 inline
 float
 find_capsule_face_intersection_time(
-  capsule_t capsule, 
-  const face_t* face, 
+  capsule_t capsule,
+  const face_t* face,
   const vector3f* normal,
   const vector3f displacement,
   const uint32_t max_iteration,
   const float limit)
 {
   point3f starting_position = capsule.center;
+  float start = 0.f, end = 1.f, mid_point;
+  uint32_t iteration = 0;
+  vector3f penetration;
+  point3f sphere_center;
+  capsule_face_classification_t classification;
+  vector3f scaled_displacement;
+  const vector3f unit = normalize_v3f(&displacement);
+  vector3f direction;
+  float distance, cosine;
+  distance = get_capsule_face_distance(&capsule, face, normal, &direction);
+  // this can be negative if the capsule is to the back of the face. It is the 
+  // caller responsiblity to filter these faces if needed.
+  cosine = fabs(dot_product_v3f(&direction, &unit));
+  distance /= cosine;
 
-  {
-    float start = 0.f, end = 1.f, mid_point;
-    uint32_t iteration = 0;
-    vector3f penetration;
-    point3f sphere_center;
-    capsule_face_classification_t classification;
-    vector3f scaled_displacement;
-    float distance = get_capsule_face_distance(&capsule, face, normal);
-
-    while (distance > limit && ++iteration < max_iteration) {
-      mid_point = start + (end - start) / 2.f;
-      scaled_displacement = mult_v3f(&displacement, mid_point);
-      capsule.center = add_v3f(&starting_position, &scaled_displacement);
-      classification = classify_capsule_face(
-        &capsule, face, normal, 0, &penetration, &sphere_center);
-      if (classification == CAPSULE_FACE_NO_COLLISION) {
-        start = mid_point;
-        distance = get_capsule_face_distance(&capsule, face, normal);
-      } else
-        end = mid_point;
-    }
-
-    return start;
+  while (distance > limit && ++iteration < max_iteration) {
+    mid_point = start + (end - start) / 2.f;
+    scaled_displacement = mult_v3f(&displacement, mid_point);
+    capsule.center = add_v3f(&starting_position, &scaled_displacement);
+    classification = classify_capsule_face(
+      &capsule, face, normal, 0, &penetration, &sphere_center);
+    if (classification == CAPSULE_FACE_NO_COLLISION) {
+      start = mid_point;
+      distance = get_capsule_face_distance(&capsule, face, normal, &direction);
+      cosine = fabs(dot_product_v3f(&direction, &unit));
+      distance /= cosine;
+    } else
+      end = mid_point;
   }
+
+  return start;
 }
 
 inline

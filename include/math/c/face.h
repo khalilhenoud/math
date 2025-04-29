@@ -128,9 +128,10 @@ classify_sphere_face(
 inline
 float
 get_sphere_face_distance(
-  const sphere_t* sphere, 
-  const face_t* face, 
-  const vector3f* normal);
+  const sphere_t *sphere, 
+  const face_t *face, 
+  const vector3f *normal,
+  vector3f *direction);
 
 typedef
 enum capsule_face_classification_t {
@@ -165,21 +166,10 @@ classify_capsule_face(
 inline
 float
 get_capsule_face_distance(
-  const capsule_t* capsule, 
-  const face_t* face, 
-  const vector3f* normal);
-
-// call this function to find the initial toi. the sphere must be in non-solid
-// at t=0 and colliding at t=1. the function will return the toi between 0 and 1
-inline
-float
-find_sphere_face_intersection_time(
-  sphere_t sphere, 
-  const face_t* face,
-  const vector3f* normal,
-  const vector3f displacement,
-  const uint32_t max_iteration,
-  const float limit);
+  const capsule_t *capsule, 
+  const face_t *face, 
+  const vector3f *normal,
+  vector3f *direction);
 
 // call this function to find the initial toi. the capsule must be in non-solid
 // at t=0 and colliding at t=1. the function will return the toi between 0 and 1
