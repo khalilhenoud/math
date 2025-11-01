@@ -8,8 +8,8 @@
  * @copyright Copyright (c) 2023
  * 
  */
-#ifndef SPHERE_COLLISION
-#define SPHERE_COLLISION
+#ifndef SPHERE_DEFINITION_H
+#define SPHERE_DEFINITION_H
 
 #ifdef __cplusplus 
 extern "C" {
@@ -23,24 +23,6 @@ struct sphere_t {
   point3f center;
   float radius;
 } sphere_t;
-
-typedef
-enum spheres_classification_t {
-  SPHERES_DISTINCT,
-  SPHERES_COLLIDE,
-  SPHERES_SHARE_CENTER,
-  SPHERES_IDENTICAL,
-  SPHERES_COUNT
-} spheres_classification_t;
-
-inline
-spheres_classification_t
-classify_spheres(
-  const sphere_t *source, 
-  const sphere_t *target,
-  vector3f* penetration);
-
-#include "sphere.inl"
 
 #ifdef __cplusplus
 }
