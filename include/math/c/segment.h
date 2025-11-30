@@ -44,7 +44,7 @@ get_point_distance_to_line(
   const point3f* point,
   const line_t* target);
 
-#include "segment.inl"
+#include "segment.impl"
 
 #ifdef __cplusplus
 }

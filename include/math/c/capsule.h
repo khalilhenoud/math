@@ -44,7 +44,7 @@ get_capsule_segment_loose(
   point3f *a,
   point3f *b);
 
-#include "capsule.inl"
+#include "capsule.impl"
 
 #ifdef __cplusplus
 }

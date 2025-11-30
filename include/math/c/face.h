@@ -53,7 +53,7 @@ get_point_projection(
   const point3f *point,
   float *distance);
 
-#include "face.inl"
+#include "face.impl"
 
 #ifdef __cplusplus
 }
