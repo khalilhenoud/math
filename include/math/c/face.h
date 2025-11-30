@@ -1,12 +1,12 @@
 /**
  * @file face.h
  * @author khalilhenoud@gmail.com
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-06-10
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #ifndef FACE_DEFINITION_H
 #define FACE_DEFINITION_H

@@ -1,15 +1,15 @@
 /**
  * @file segment.c
  * @author khalilhenoud@gmail.com
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-06-10
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
-#include <math.h>
 #include <assert.h>
+#include <math.h>
 #include <math/c/segment.h>
 
 
@@ -31,7 +31,7 @@ get_point_distance_to_line(
   a_point_length = length_v3f(&a_point);
   if (IS_ZERO_LP(a_point_length))
     return 0.f;
-  
+
   a_b_normalized = div_v3f(&a_b, ab_length);
   a_point_normalized = div_v3f(&a_point, a_point_length);
   dot = dot_product_v3f(&a_b_normalized, &a_point_normalized);
@@ -40,9 +40,9 @@ get_point_distance_to_line(
 }
 
 inline
-point3f 
+point3f
 closest_point_on_segment(
-  const point3f* point, 
+  const point3f* point,
   const segment_t* target)
 {
   float proj_length, ab_length;
@@ -67,9 +67,9 @@ closest_point_on_segment(
 }
 
 inline
-point3f 
+point3f
 closest_point_on_segment_loose(
-  const point3f* point, 
+  const point3f* point,
   const point3f* a,
   const point3f* b)
 {

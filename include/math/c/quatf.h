@@ -1,12 +1,12 @@
 /**
  * @file quatf.h
  * @author khalilhenoud@gmail.com
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-07-03
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #ifndef C_QUAT_H
 #define C_QUAT_H
@@ -15,18 +15,18 @@
 extern "C" {
 #endif
 
-#include <string.h>
 #include <math.h>
-#include <math/c/vector3f.h>
+#include <string.h>
 #include <math/c/matrix3f.h>
 #include <math/c/matrix4f.h>
+#include <math/c/vector3f.h>
 
 
 typedef
 enum {
   QUAT_S,
-  QUAT_X, 
-  QUAT_Y, 
+  QUAT_X,
+  QUAT_Y,
   QUAT_Z
 } QUAT_DATA;
 
@@ -80,7 +80,7 @@ quatf_set_from_axis_angle(quatf* dst, const vector3f* axis, float angle_radian)
   dst->data[QUAT_Z] = sin_half * axis->data[2];
 }
 
-// NOTE: 'from' is a rotation matrix with no scaling applied. 
+// NOTE: 'from' is a rotation matrix with no scaling applied.
 // below is a very useful resource, it also contains an explanation as to why we
 // test (trace > 0) as opposed to (trace + 1 > 0).
 // https://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/
@@ -96,21 +96,21 @@ quatf_set_from_rotation_matrix3f(quatf* dst, const matrix3f* from)
 		dst->data[QUAT_Z] = (from->data[M3_RC_01] - from->data[M3_RC_10])/(4 * dst->data[QUAT_S]);
 	} else {
     if (
-      (from->data[M3_RC_00] >= from->data[M3_RC_11]) && 
+      (from->data[M3_RC_00] >= from->data[M3_RC_11]) &&
       (from->data[M3_RC_00] >= from->data[M3_RC_22])) {
       dst->data[QUAT_X] = sqrtf(from->data[M3_RC_00] - from->data[M3_RC_11] - from->data[M3_RC_22] + 1.f) / 2.f;
-      dst->data[QUAT_S] = (from->data[M3_RC_12] - from->data[M3_RC_21])/(4 * dst->data[QUAT_X]);		
+      dst->data[QUAT_S] = (from->data[M3_RC_12] - from->data[M3_RC_21])/(4 * dst->data[QUAT_X]);
 			dst->data[QUAT_Y] = (from->data[M3_RC_01] + from->data[M3_RC_10])/(4 * dst->data[QUAT_X]);
 			dst->data[QUAT_Z] = (from->data[M3_RC_02] + from->data[M3_RC_20])/(4 * dst->data[QUAT_X]);
 		} else if (
-      (from->data[M3_RC_11] >= from->data[M3_RC_00]) && 
+      (from->data[M3_RC_11] >= from->data[M3_RC_00]) &&
       (from->data[M3_RC_11] >= from->data[M3_RC_22])) {
       dst->data[QUAT_Y] = sqrtf(from->data[M3_RC_11] - from->data[M3_RC_00] - from->data[M3_RC_22] + 1.f) / 2.f;
       dst->data[QUAT_S] = (from->data[M3_RC_20] - from->data[M3_RC_02])/(4 * dst->data[QUAT_Y]);
 			dst->data[QUAT_X] = (from->data[M3_RC_01] + from->data[M3_RC_10])/(4 * dst->data[QUAT_Y]);
 			dst->data[QUAT_Z] = (from->data[M3_RC_12] + from->data[M3_RC_21])/(4 * dst->data[QUAT_Y]);
 		} else if (
-      (from->data[M3_RC_22] >= from->data[M3_RC_00]) && 
+      (from->data[M3_RC_22] >= from->data[M3_RC_00]) &&
       (from->data[M3_RC_22] >= from->data[M3_RC_11])) {
       dst->data[QUAT_Z] = sqrtf(from->data[M3_RC_22] - from->data[M3_RC_00] - from->data[M3_RC_11] + 1.f) / 2.f;
       dst->data[QUAT_S] = (from->data[M3_RC_01] - from->data[M3_RC_10])/(4 * dst->data[QUAT_Z]);
@@ -133,21 +133,21 @@ quatf_set_from_rotation_matrix4f(quatf* dst, const matrix4f* from)
 		dst->data[QUAT_Z] = (from->data[M4_RC_01] - from->data[M4_RC_10])/(4 * dst->data[QUAT_S]);
 	} else {
     if (
-      (from->data[M4_RC_00] >= from->data[M4_RC_11]) && 
+      (from->data[M4_RC_00] >= from->data[M4_RC_11]) &&
       (from->data[M4_RC_00] >= from->data[M4_RC_22])) {
       dst->data[QUAT_X] = sqrtf(from->data[M4_RC_00] - from->data[M4_RC_11] - from->data[M4_RC_22] + 1.f) / 2.f;
-      dst->data[QUAT_S] = (from->data[M4_RC_12] - from->data[M4_RC_21])/(4 * dst->data[QUAT_X]);		
+      dst->data[QUAT_S] = (from->data[M4_RC_12] - from->data[M4_RC_21])/(4 * dst->data[QUAT_X]);
 			dst->data[QUAT_Y] = (from->data[M4_RC_01] + from->data[M4_RC_10])/(4 * dst->data[QUAT_X]);
 			dst->data[QUAT_Z] = (from->data[M4_RC_02] + from->data[M4_RC_20])/(4 * dst->data[QUAT_X]);
 		} else if (
-      (from->data[M4_RC_11] >= from->data[M4_RC_00]) && 
+      (from->data[M4_RC_11] >= from->data[M4_RC_00]) &&
       (from->data[M4_RC_11] >= from->data[M4_RC_22])) {
       dst->data[QUAT_Y] = sqrtf(from->data[M4_RC_11] - from->data[M4_RC_00] - from->data[M4_RC_22] + 1.f) / 2.f;
       dst->data[QUAT_S] = (from->data[M4_RC_20] - from->data[M4_RC_02])/(4 * dst->data[QUAT_Y]);
 			dst->data[QUAT_X] = (from->data[M4_RC_01] + from->data[M4_RC_10])/(4 * dst->data[QUAT_Y]);
 			dst->data[QUAT_Z] = (from->data[M4_RC_12] + from->data[M4_RC_21])/(4 * dst->data[QUAT_Y]);
 		} else if (
-      (from->data[M4_RC_22] >= from->data[M4_RC_00]) && 
+      (from->data[M4_RC_22] >= from->data[M4_RC_00]) &&
       (from->data[M4_RC_22] >= from->data[M4_RC_11])) {
       dst->data[QUAT_Z] = sqrtf(from->data[M4_RC_22] - from->data[M4_RC_00] - from->data[M4_RC_11] + 1.f) / 2.f;
       dst->data[QUAT_S] = (from->data[M4_RC_01] - from->data[M4_RC_10])/(4 * dst->data[QUAT_Z]);
@@ -181,9 +181,9 @@ float
 length_quatf(const quatf* src)
 {
   return sqrtf(
-    src->data[QUAT_S] * src->data[QUAT_S] + 
-    src->data[QUAT_X] * src->data[QUAT_X] + 
-    src->data[QUAT_Y] * src->data[QUAT_Y] + 
+    src->data[QUAT_S] * src->data[QUAT_S] +
+    src->data[QUAT_X] * src->data[QUAT_X] +
+    src->data[QUAT_Y] * src->data[QUAT_Y] +
     src->data[QUAT_Z] * src->data[QUAT_Z]);
 }
 
@@ -191,10 +191,10 @@ inline
 float
 length_squared_quatf(const quatf* src)
 {
-  return 
-    src->data[QUAT_S] * src->data[QUAT_S] + 
-    src->data[QUAT_X] * src->data[QUAT_X] + 
-    src->data[QUAT_Y] * src->data[QUAT_Y] + 
+  return
+    src->data[QUAT_S] * src->data[QUAT_S] +
+    src->data[QUAT_X] * src->data[QUAT_X] +
+    src->data[QUAT_Y] * src->data[QUAT_Y] +
     src->data[QUAT_Z] * src->data[QUAT_Z];
 }
 

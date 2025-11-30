@@ -4,9 +4,9 @@
  * @brief float 3 container, the interpretation of which is context dependent
  * @version 0.1
  * @date 2023-01-08
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #ifndef C_VECTOR_3F_H
 #define C_VECTOR_3F_H
@@ -30,7 +30,7 @@ typedef vector3f point3f;
 
 ////////////////////////////////////////////////////////////////////////////////
 inline
-void 
+void
 vector3f_set_1f(vector3f* dst, float value)
 {
   dst->data[0] = dst->data[1] = dst->data[2] = value;
@@ -60,7 +60,7 @@ vector3f_set_a3f(vector3f* dst, const float* data)
 {
   dst->data[0] = data[0];
   dst->data[1] = data[1];
-  dst->data[2] = data[2]; 
+  dst->data[2] = data[2];
 }
 
 inline
@@ -87,19 +87,19 @@ inline
 float
 length_squared_v3f(const vector3f* src)
 {
-  return 
-    src->data[0] * src->data[0] + 
-    src->data[1] * src->data[1] + 
+  return
+    src->data[0] * src->data[0] +
+    src->data[1] * src->data[1] +
     src->data[2] * src->data[2];
 }
 
 inline
-float 
+float
 dot_product_v3f(const vector3f* lhs, const vector3f* rhs)
 {
-  return 
-    lhs->data[0] * rhs->data[0] + 
-    lhs->data[1] * rhs->data[1] + 
+  return
+    lhs->data[0] * rhs->data[0] +
+    lhs->data[1] * rhs->data[1] +
     lhs->data[2] * rhs->data[2];
 }
 

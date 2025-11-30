@@ -1,26 +1,26 @@
 /**
  * @file matrix4f.h
  * @author khalilhenoud@gmail.com
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-01-19
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #ifndef CPP_MATRIX_4F_H
 #define CPP_MATRIX_4F_H
 
 #include <cmath>
 #include <math/common.h>
-#include <math/vector3f.h>
-#include <math/matrix3f.h>
 #include <math/c/matrix4f.h>
+#include <math/matrix3f.h>
+#include <math/vector3f.h>
 
 
 namespace math {
 
-struct 
+struct
 matrix4f {
   matrix4f(const ::matrix4f& m4)
   {
@@ -38,14 +38,14 @@ matrix4f {
   }
 
   static
-  matrix4f 
+  matrix4f
   axisangle(const vector3f& axis, float alpha_degrees)
   {
     return matrix4f(axis, alpha_degrees);
   }
 
-  static 
-  matrix4f 
+  static
+  matrix4f
   rotation_x(float angle_radian)
   {
     ::matrix4f result;
@@ -53,8 +53,8 @@ matrix4f {
     return result;
   }
 
-  static 
-  matrix4f 
+  static
+  matrix4f
   rotation_y(float angle_radian)
   {
     ::matrix4f result;
@@ -62,8 +62,8 @@ matrix4f {
     return result;
   }
 
-  static 
-  matrix4f 
+  static
+  matrix4f
   rotation_z(float angle_radian)
   {
     ::matrix4f result;
@@ -71,8 +71,8 @@ matrix4f {
     return result;
   }
 
-  static 
-  matrix4f 
+  static
+  matrix4f
   translation(float x, float y, float z)
   {
     ::matrix4f result;
@@ -80,8 +80,8 @@ matrix4f {
     return result;
   }
 
-  static 
-  matrix4f 
+  static
+  matrix4f
   scale(float x, float y, float z)
   {
     ::matrix4f result;
@@ -89,8 +89,8 @@ matrix4f {
     return result;
   }
 
-  static 
-  matrix4f 
+  static
+  matrix4f
   cross_product(const vector3f& vec)
   {
     ::matrix4f result;
@@ -99,37 +99,37 @@ matrix4f {
   }
 
   //////////////////////////////////////////////////////////////////////////////
-  float 
+  float
   determinant(void) const
   {
     return ::determinant_m4f(&data);
   }
 
-  matrix4f 
+  matrix4f
   inverse(void) const
   {
     return ::inverse_m4f(&data);
   }
 
-  void 
+  void
   set_inverse(void)
   {
     ::inverse_set_m4f(&data);
   }
 
-  matrix4f 
+  matrix4f
   transpose(void) const
   {
     return ::transpose_m4f(&data);
   }
 
-  void 
+  void
   set_transpose(void)
   {
     ::transpose_set_m4f(&data);
   }
 
-  matrix4f 
+  matrix4f
   to_column_major() const
   {
     ::matrix4f result;
@@ -137,44 +137,44 @@ matrix4f {
     return result;
   }
 
-  void 
+  void
   to_axisangle(vector3f& axis, float& angle) const
   {
     ::to_axisangle_m4f(&data, &axis.data, &angle);
   }
 
   //////////////////////////////////////////////////////////////////////////////
-  matrix4f 
+  matrix4f
   operator *(float scale) const
   {
     return ::mult_m4f_f(&data, scale);
   }
 
-  vector3f 
+  vector3f
   mult_vec(const vector3f& vec3) const
   {
     return ::mult_m4f_v3f(&data, &vec3.data);
   }
 
-  vector3f 
+  vector3f
   mult_point(const vector3f& pt3) const
   {
     return ::mult_m4f_p3f(&data, &pt3.data);
   }
 
-  matrix4f 
+  matrix4f
   operator *(const matrix4f& mtx) const
   {
     return ::mult_m4f(&data, &mtx.data);
   }
 
-  constexpr float& 
+  constexpr float&
   operator[](M4_RC_XX index)
   {
     return data.data[static_cast<int32_t>(index)];
   }
 
-  constexpr const float& 
+  constexpr const float&
   operator[](M4_RC_XX index) const
   {
     return data.data[static_cast<int32_t>(index)];
@@ -184,7 +184,7 @@ matrix4f {
 };
 
 inline
-matrix4f 
+matrix4f
 operator *(float scale, const matrix4f& mtx)
 {
   return ::mult_m4f_f(&mtx.data, scale);

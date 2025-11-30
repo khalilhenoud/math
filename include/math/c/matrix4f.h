@@ -1,12 +1,12 @@
 /**
  * @file matrix4f.h
  * @author khalilhenoud@gmail.com
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-01-10
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #ifndef C_MATRIX4F_H
 #define C_MATRIX4F_H
@@ -38,7 +38,7 @@ enum {
   M4_RC_33
 } M4_RC_XX;
 
-typedef 
+typedef
 struct matrix4f {
   float data[16];
 } matrix4f;
@@ -49,8 +49,8 @@ inline
 void
 matrix4f_set_identity(matrix4f* dst)
 {
-  dst->data[M4_RC_01] = dst->data[M4_RC_02] = dst->data[M4_RC_03] = dst->data[M4_RC_10] = 
-  dst->data[M4_RC_12] = dst->data[M4_RC_13] = dst->data[M4_RC_20] = dst->data[M4_RC_21] = 
+  dst->data[M4_RC_01] = dst->data[M4_RC_02] = dst->data[M4_RC_03] = dst->data[M4_RC_10] =
+  dst->data[M4_RC_12] = dst->data[M4_RC_13] = dst->data[M4_RC_20] = dst->data[M4_RC_21] =
   dst->data[M4_RC_23] = dst->data[M4_RC_30] = dst->data[M4_RC_31] = dst->data[M4_RC_32] = 0.f;
   dst->data[M4_RC_00] = dst->data[M4_RC_11] = dst->data[M4_RC_22] = dst->data[M4_RC_33] = 1.f;
 }
@@ -133,7 +133,7 @@ matrix4f_cross_product(matrix4f* dst, const vector3f* vec)
   vector3f result = normalize_v3f(vec);
   matrix4f_set_identity(dst);
 
-  dst->data[M4_RC_00] = dst->data[M4_RC_30] = dst->data[M4_RC_11] = 
+  dst->data[M4_RC_00] = dst->data[M4_RC_30] = dst->data[M4_RC_11] =
   dst->data[M4_RC_31] = dst->data[M4_RC_22] = dst->data[M4_RC_32] = 0.f;
   dst->data[M4_RC_10] = result.data[2];
   dst->data[M4_RC_20] = -result.data[1];
@@ -144,7 +144,7 @@ matrix4f_cross_product(matrix4f* dst, const vector3f* vec)
 }
 
 /// @brief convert our row major matrix (directx format) to column major (opengl
-/// is column major). 
+/// is column major).
 inline
 void
 matrix4f_set_column_major(matrix4f* dst, const matrix4f* src)
@@ -196,8 +196,8 @@ determinant_m4f(const matrix4f* src)
   det2 = determinant_m3f(&d2);
   det3 = determinant_m3f(&d3);
 
-  return 
-    src->data[M4_RC_00] * det0 - src->data[M4_RC_01] * det1 + 
+  return
+    src->data[M4_RC_00] * det0 - src->data[M4_RC_01] * det1 +
     src->data[M4_RC_02] * det2 - src->data[M4_RC_03] * det3;
 }
 
@@ -222,13 +222,13 @@ transpose_set_m4f(matrix4f* dst)
 }
 
 inline
-matrix4f 
+matrix4f
 inverse_m4f(const matrix4f* src)
 {
   void mult_set_m4f_f(matrix4f*, float);
-  float det1, det2, det3, det4, 
-        det5, det6, det7, det8, 
-        det9, det10, det11, det12, 
+  float det1, det2, det3, det4,
+        det5, det6, det7, det8,
+        det9, det10, det11, det12,
         det13, det14, det15, det16;
   matrix3f tmp;
   matrix4f result;
@@ -342,32 +342,32 @@ to_axisangle_m4f(const matrix4f* src, vector3f* axis, float* angle_deg)
   float trace = src->data[M4_RC_00] + src->data[M4_RC_11] + src->data[M4_RC_22];
   *angle_deg = acosf((trace - 1.f) / 2.f);
   *angle_deg = *angle_deg / (float)K_PI * 180.f;
-  
+
   if (K_EQUAL_TO(*angle_deg, 0.f, (2 * FLT_MIN)))
     vector3f_set_3f(axis, 0.f, 0.f, 1.f);
   else if (K_EQUAL_TO(*angle_deg, 180.f, (2 * FLT_MIN))) {
     float x = 0.f, y = 0.f, z = 0.f;
     if (
-      (src->data[M4_RC_00] >= src->data[M4_RC_11]) && 
+      (src->data[M4_RC_00] >= src->data[M4_RC_11]) &&
       (src->data[M4_RC_00] >= src->data[M4_RC_22])) {
-      x = 
-        sqrtf(src->data[M4_RC_00] - src->data[M4_RC_11] - 
+      x =
+        sqrtf(src->data[M4_RC_00] - src->data[M4_RC_11] -
         src->data[M4_RC_22] + 1.f) / 2.f;
       y = src->data[M4_RC_01] / (2 * x);
       z = src->data[M4_RC_02] / (2 * x);
     } else if (
-      (src->data[M4_RC_11] >= src->data[M4_RC_00]) && 
+      (src->data[M4_RC_11] >= src->data[M4_RC_00]) &&
       (src->data[M4_RC_11] >= src->data[M4_RC_22])) {
-      y = 
-        sqrtf(src->data[M4_RC_11] - src->data[M4_RC_00] - 
+      y =
+        sqrtf(src->data[M4_RC_11] - src->data[M4_RC_00] -
         src->data[M4_RC_22] + 1.f) / 2.f;
       x = src->data[M4_RC_01] / (2 * y);
       z = src->data[M4_RC_12] / (2 * y);
     } else if (
-      (src->data[M4_RC_22] >= src->data[M4_RC_00]) && 
+      (src->data[M4_RC_22] >= src->data[M4_RC_00]) &&
       (src->data[M4_RC_22] >= src->data[M4_RC_11])) {
-      z = 
-        sqrtf(src->data[M4_RC_22] - src->data[M4_RC_00] - 
+      z =
+        sqrtf(src->data[M4_RC_22] - src->data[M4_RC_00] -
         src->data[M4_RC_11] + 1.f) / 2.f;
       x = src->data[M4_RC_02] / (2 * z);
       y = src->data[M4_RC_12] / (2 * z);
@@ -390,69 +390,69 @@ matrix4f
 mult_m4f(const matrix4f* lhs, const matrix4f* rhs)
 {
   matrix4f result;
-  result.data[M4_RC_00] = lhs->data[M4_RC_00] * rhs->data[M4_RC_00] + 
-                          lhs->data[M4_RC_01] * rhs->data[M4_RC_10] + 
-                          lhs->data[M4_RC_02] * rhs->data[M4_RC_20] + 
+  result.data[M4_RC_00] = lhs->data[M4_RC_00] * rhs->data[M4_RC_00] +
+                          lhs->data[M4_RC_01] * rhs->data[M4_RC_10] +
+                          lhs->data[M4_RC_02] * rhs->data[M4_RC_20] +
                           lhs->data[M4_RC_03] * rhs->data[M4_RC_30];
-  result.data[M4_RC_01] = lhs->data[M4_RC_00] * rhs->data[M4_RC_01] + 
-                          lhs->data[M4_RC_01] * rhs->data[M4_RC_11] + 
-                          lhs->data[M4_RC_02] * rhs->data[M4_RC_21] + 
+  result.data[M4_RC_01] = lhs->data[M4_RC_00] * rhs->data[M4_RC_01] +
+                          lhs->data[M4_RC_01] * rhs->data[M4_RC_11] +
+                          lhs->data[M4_RC_02] * rhs->data[M4_RC_21] +
                           lhs->data[M4_RC_03] * rhs->data[M4_RC_31];
-  result.data[M4_RC_02] = lhs->data[M4_RC_00] * rhs->data[M4_RC_02] + 
-                          lhs->data[M4_RC_01] * rhs->data[M4_RC_12] + 
-                          lhs->data[M4_RC_02] * rhs->data[M4_RC_22] + 
+  result.data[M4_RC_02] = lhs->data[M4_RC_00] * rhs->data[M4_RC_02] +
+                          lhs->data[M4_RC_01] * rhs->data[M4_RC_12] +
+                          lhs->data[M4_RC_02] * rhs->data[M4_RC_22] +
                           lhs->data[M4_RC_03] * rhs->data[M4_RC_32];
-  result.data[M4_RC_03] = lhs->data[M4_RC_00] * rhs->data[M4_RC_03] + 
-                          lhs->data[M4_RC_01] * rhs->data[M4_RC_13] + 
-                          lhs->data[M4_RC_02] * rhs->data[M4_RC_23] + 
+  result.data[M4_RC_03] = lhs->data[M4_RC_00] * rhs->data[M4_RC_03] +
+                          lhs->data[M4_RC_01] * rhs->data[M4_RC_13] +
+                          lhs->data[M4_RC_02] * rhs->data[M4_RC_23] +
                           lhs->data[M4_RC_03] * rhs->data[M4_RC_33];
-  result.data[M4_RC_10] = lhs->data[M4_RC_10] * rhs->data[M4_RC_00] + 
-                          lhs->data[M4_RC_11] * rhs->data[M4_RC_10] + 
-                          lhs->data[M4_RC_12] * rhs->data[M4_RC_20] + 
+  result.data[M4_RC_10] = lhs->data[M4_RC_10] * rhs->data[M4_RC_00] +
+                          lhs->data[M4_RC_11] * rhs->data[M4_RC_10] +
+                          lhs->data[M4_RC_12] * rhs->data[M4_RC_20] +
                           lhs->data[M4_RC_13] * rhs->data[M4_RC_30];
-  result.data[M4_RC_11] = lhs->data[M4_RC_10] * rhs->data[M4_RC_01] + 
-                          lhs->data[M4_RC_11] * rhs->data[M4_RC_11] + 
-                          lhs->data[M4_RC_12] * rhs->data[M4_RC_21] + 
+  result.data[M4_RC_11] = lhs->data[M4_RC_10] * rhs->data[M4_RC_01] +
+                          lhs->data[M4_RC_11] * rhs->data[M4_RC_11] +
+                          lhs->data[M4_RC_12] * rhs->data[M4_RC_21] +
                           lhs->data[M4_RC_13] * rhs->data[M4_RC_31];
-  result.data[M4_RC_12] = lhs->data[M4_RC_10] * rhs->data[M4_RC_02] + 
-                          lhs->data[M4_RC_11] * rhs->data[M4_RC_12] + 
-                          lhs->data[M4_RC_12] * rhs->data[M4_RC_22] + 
+  result.data[M4_RC_12] = lhs->data[M4_RC_10] * rhs->data[M4_RC_02] +
+                          lhs->data[M4_RC_11] * rhs->data[M4_RC_12] +
+                          lhs->data[M4_RC_12] * rhs->data[M4_RC_22] +
                           lhs->data[M4_RC_13] * rhs->data[M4_RC_32];
-  result.data[M4_RC_13] = lhs->data[M4_RC_10] * rhs->data[M4_RC_03] + 
-                          lhs->data[M4_RC_11] * rhs->data[M4_RC_13] + 
-                          lhs->data[M4_RC_12] * rhs->data[M4_RC_23] + 
+  result.data[M4_RC_13] = lhs->data[M4_RC_10] * rhs->data[M4_RC_03] +
+                          lhs->data[M4_RC_11] * rhs->data[M4_RC_13] +
+                          lhs->data[M4_RC_12] * rhs->data[M4_RC_23] +
                           lhs->data[M4_RC_13] * rhs->data[M4_RC_33];
-  result.data[M4_RC_20] = lhs->data[M4_RC_20] * rhs->data[M4_RC_00] + 
-                          lhs->data[M4_RC_21] * rhs->data[M4_RC_10] + 
-                          lhs->data[M4_RC_22] * rhs->data[M4_RC_20] + 
+  result.data[M4_RC_20] = lhs->data[M4_RC_20] * rhs->data[M4_RC_00] +
+                          lhs->data[M4_RC_21] * rhs->data[M4_RC_10] +
+                          lhs->data[M4_RC_22] * rhs->data[M4_RC_20] +
                           lhs->data[M4_RC_23] * rhs->data[M4_RC_30];
-  result.data[M4_RC_21] = lhs->data[M4_RC_20] * rhs->data[M4_RC_01] + 
-                          lhs->data[M4_RC_21] * rhs->data[M4_RC_11] + 
-                          lhs->data[M4_RC_22] * rhs->data[M4_RC_21] + 
+  result.data[M4_RC_21] = lhs->data[M4_RC_20] * rhs->data[M4_RC_01] +
+                          lhs->data[M4_RC_21] * rhs->data[M4_RC_11] +
+                          lhs->data[M4_RC_22] * rhs->data[M4_RC_21] +
                           lhs->data[M4_RC_23] * rhs->data[M4_RC_31];
-  result.data[M4_RC_22] = lhs->data[M4_RC_20] * rhs->data[M4_RC_02] + 
-                          lhs->data[M4_RC_21] * rhs->data[M4_RC_12] + 
-                          lhs->data[M4_RC_22] * rhs->data[M4_RC_22] + 
+  result.data[M4_RC_22] = lhs->data[M4_RC_20] * rhs->data[M4_RC_02] +
+                          lhs->data[M4_RC_21] * rhs->data[M4_RC_12] +
+                          lhs->data[M4_RC_22] * rhs->data[M4_RC_22] +
                           lhs->data[M4_RC_23] * rhs->data[M4_RC_32];
-  result.data[M4_RC_23] = lhs->data[M4_RC_20] * rhs->data[M4_RC_03] + 
-                          lhs->data[M4_RC_21] * rhs->data[M4_RC_13] + 
-                          lhs->data[M4_RC_22] * rhs->data[M4_RC_23] + 
+  result.data[M4_RC_23] = lhs->data[M4_RC_20] * rhs->data[M4_RC_03] +
+                          lhs->data[M4_RC_21] * rhs->data[M4_RC_13] +
+                          lhs->data[M4_RC_22] * rhs->data[M4_RC_23] +
                           lhs->data[M4_RC_23] * rhs->data[M4_RC_33];
-  result.data[M4_RC_30] = lhs->data[M4_RC_30] * rhs->data[M4_RC_00] + 
-                          lhs->data[M4_RC_31] * rhs->data[M4_RC_10] + 
-                          lhs->data[M4_RC_32] * rhs->data[M4_RC_20] + 
+  result.data[M4_RC_30] = lhs->data[M4_RC_30] * rhs->data[M4_RC_00] +
+                          lhs->data[M4_RC_31] * rhs->data[M4_RC_10] +
+                          lhs->data[M4_RC_32] * rhs->data[M4_RC_20] +
                           lhs->data[M4_RC_33] * rhs->data[M4_RC_30];
-  result.data[M4_RC_31] = lhs->data[M4_RC_30] * rhs->data[M4_RC_01] + 
-                          lhs->data[M4_RC_31] * rhs->data[M4_RC_11] + 
-                          lhs->data[M4_RC_32] * rhs->data[M4_RC_21] + 
+  result.data[M4_RC_31] = lhs->data[M4_RC_30] * rhs->data[M4_RC_01] +
+                          lhs->data[M4_RC_31] * rhs->data[M4_RC_11] +
+                          lhs->data[M4_RC_32] * rhs->data[M4_RC_21] +
                           lhs->data[M4_RC_33] * rhs->data[M4_RC_31];
-  result.data[M4_RC_32] = lhs->data[M4_RC_30] * rhs->data[M4_RC_02] + 
-                          lhs->data[M4_RC_31] * rhs->data[M4_RC_12] + 
-                          lhs->data[M4_RC_32] * rhs->data[M4_RC_22] + 
+  result.data[M4_RC_32] = lhs->data[M4_RC_30] * rhs->data[M4_RC_02] +
+                          lhs->data[M4_RC_31] * rhs->data[M4_RC_12] +
+                          lhs->data[M4_RC_32] * rhs->data[M4_RC_22] +
                           lhs->data[M4_RC_33] * rhs->data[M4_RC_32];
-  result.data[M4_RC_33] = lhs->data[M4_RC_30] * rhs->data[M4_RC_03] + 
-                          lhs->data[M4_RC_31] * rhs->data[M4_RC_13] + 
-                          lhs->data[M4_RC_32] * rhs->data[M4_RC_23] + 
+  result.data[M4_RC_33] = lhs->data[M4_RC_30] * rhs->data[M4_RC_03] +
+                          lhs->data[M4_RC_31] * rhs->data[M4_RC_13] +
+                          lhs->data[M4_RC_32] * rhs->data[M4_RC_23] +
                           lhs->data[M4_RC_33] * rhs->data[M4_RC_33];
   return result;
 }
@@ -497,13 +497,13 @@ mult_m4f_v3f(const matrix4f* lhs, const vector3f* rhs)
   return result;
 }
 
-/// @brief will return rhs address so it can be reused. 
+/// @brief will return rhs address so it can be reused.
 inline
 vector3f*
 mult_set_m4f_v3f(const matrix4f* lhs, vector3f* rhs)
 {
   vector3f result = mult_m4f_v3f(lhs, rhs);
-  vector3f_copy(rhs, &result);  
+  vector3f_copy(rhs, &result);
   return rhs;
 }
 

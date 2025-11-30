@@ -1,27 +1,27 @@
 /**
  * @file quatf.h
  * @author khalilhenoud@gmail.com
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-07-08
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #ifndef CPP_QUATF_H
 #define CPP_QUATF_H
 
 #include <cmath>
 #include <math/common.h>
-#include <math/vector3f.h>
+#include <math/c/quatf.h>
 #include <math/matrix3f.h>
 #include <math/matrix4f.h>
-#include <math/c/quatf.h>
+#include <math/vector3f.h>
 
 
 namespace math {
 
-struct 
+struct
 quatf {
   quatf(float s, float x, float y, float z)
   {
@@ -85,7 +85,7 @@ quatf {
   {
     ::get_quatf_axis_angle(&data, &axis.data, &angle_radian);
   }
-  
+
   //////////////////////////////////////////////////////////////////////////////
   float
   length(void) const
@@ -155,13 +155,13 @@ quatf {
     return ::mult_quatf_v3f(&data, &vec3.data);
   }
 
-  constexpr float& 
+  constexpr float&
   operator[](QUAT_DATA index)
   {
     return data.data[static_cast<int32_t>(index)];
   }
 
-  constexpr const float& 
+  constexpr const float&
   operator[](QUAT_DATA index) const
   {
     return data.data[static_cast<int32_t>(index)];
@@ -171,7 +171,7 @@ quatf {
 };
 
 inline
-quatf 
+quatf
 operator *(float scale, const quatf& quat)
 {
   return ::mult_quatf_f(&quat.data, scale);

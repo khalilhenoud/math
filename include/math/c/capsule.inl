@@ -1,15 +1,15 @@
 /**
  * @file capsule.c
  * @author khalilhenoud@gmail.com
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-06-18
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
-#include <math.h>
 #include <assert.h>
+#include <math.h>
 #include <math/c/capsule.h>
 #include <math/c/segment.h>
 
@@ -27,13 +27,13 @@ get_capsule_segment(
 
     mult_set_v3f(&direction_source, source->half_height);
     vector3f_set_diff_v3f(
-      segment->points + 0, 
-      &direction_source, 
+      segment->points + 0,
+      &direction_source,
       &source->center); // a is in the -y.
     mult_set_v3f(&direction_source, -1.f);
     vector3f_set_diff_v3f(
-      segment->points + 1, 
-      &direction_source, 
+      segment->points + 1,
+      &direction_source,
       &source->center); // b is in the +y
   }
 }
@@ -53,13 +53,13 @@ get_capsule_segment_loose(
 
     mult_set_v3f(&direction_source, source->half_height);
     vector3f_set_diff_v3f(
-      a, 
-      &direction_source, 
+      a,
+      &direction_source,
       &source->center); // a is in the -y.
     mult_set_v3f(&direction_source, -1.f);
     vector3f_set_diff_v3f(
-      b, 
-      &direction_source, 
+      b,
+      &direction_source,
       &source->center); // b is in the +y
   }
 }

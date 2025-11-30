@@ -1,12 +1,12 @@
 /**
  * @file capsule.h
  * @author khalilhenoud@gmail.com
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-06-18
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #ifndef CAPSULE_DEFINITION_H
 #define CAPSULE_DEFINITION_H
@@ -25,7 +25,7 @@ typedef struct segment_t segment_t;
 typedef
 struct capsule_t {
   point3f center;
-  float half_height; 
+  float half_height;
   float radius;
 } capsule_t;
 

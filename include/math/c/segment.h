@@ -1,12 +1,12 @@
 /**
  * @file segment.h
  * @author khalilhenoud@gmail.com
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-06-10
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #ifndef SEGMENT_DEFINITION_H
 #define SEGMENT_DEFINITION_H
@@ -18,7 +18,7 @@ extern "C" {
 #include <math/c/vector3f.h>
 
 
-typedef 
+typedef
 struct segment_t {
   point3f points[2];
 } segment_t;
@@ -26,15 +26,15 @@ struct segment_t {
 typedef segment_t line_t;
 
 inline
-point3f 
+point3f
 closest_point_on_segment(
   const point3f* point,
   const segment_t* target);
 
 inline
-point3f 
+point3f
 closest_point_on_segment_loose(
-  const point3f* point, 
+  const point3f* point,
   const point3f* a,
   const point3f* b);
 

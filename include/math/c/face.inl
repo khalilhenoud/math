@@ -1,15 +1,15 @@
 /**
  * @file face.c
  * @author khalilhenoud@gmail.com
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-06-10
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
-#include <math.h>
 #include <assert.h>
+#include <math.h>
 #include <math/c/face.h>
 
 
@@ -47,7 +47,7 @@ get_extended_face(
       mult_set_v3f(avec + 1, -k);
       vector3f_copy(&offset, avec + 0);
       add_set_v3f(&offset, avec + 1);
-      add_set_v3f(augmented.points + i, &offset); 
+      add_set_v3f(augmented.points + i, &offset);
     }
 
     return augmented;
@@ -57,8 +57,8 @@ get_extended_face(
 inline
 void
 get_faces_normals(
-  const face_t *faces, 
-  const uint32_t count, 
+  const face_t *faces,
+  const uint32_t count,
   vector3f *normals)
 {
   vector3f v1, v2;
@@ -76,8 +76,8 @@ get_faces_normals(
 inline
 float
 get_point_distance(
-  const face_t *face, 
-  const vector3f *normal, 
+  const face_t *face,
+  const vector3f *normal,
   const point3f *point)
 {
   vector3f to_point = diff_v3f(&face->points[0], point);
@@ -87,14 +87,14 @@ get_point_distance(
 inline
 point3f
 get_point_projection(
-  const face_t *face, 
-  const vector3f *normal, 
+  const face_t *face,
+  const vector3f *normal,
   const point3f *point,
   float *distance)
 {
   assert(distance != NULL);
   *distance = get_point_distance(face, normal, point);
-  
+
   {
     vector3f scaled_normal = mult_v3f(normal, *distance);
     point3f projected = diff_v3f(&scaled_normal, point);
