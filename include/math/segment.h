@@ -15,7 +15,7 @@
 extern "C" {
 #endif
 
-#include <math/c/vector3f.h>
+#include <math/vector3f.h>
 
 
 typedef

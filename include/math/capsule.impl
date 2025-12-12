@@ -10,8 +10,8 @@
  */
 #include <assert.h>
 #include <math.h>
-#include <math/c/capsule.h>
-#include <math/c/segment.h>
+#include <math/capsule.h>
+#include <math/segment.h>
 
 
 inline

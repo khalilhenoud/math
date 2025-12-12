@@ -15,7 +15,7 @@
 extern "C" {
 #endif
 
-#include <math/c/matrix3f.h>
+#include <math/matrix3f.h>
 
 
 typedef

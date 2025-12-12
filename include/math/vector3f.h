@@ -17,7 +17,7 @@ extern "C" {
 
 #include <math.h>
 #include <float.h>
-#include <math/c/common.h>
+#include <math/common.h>
 
 
 typedef

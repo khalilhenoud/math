@@ -17,8 +17,8 @@ extern "C" {
 
 #include <math.h>
 #include <string.h>
-#include <math/c/common.h>
-#include <math/c/vector3f.h>
+#include <math/common.h>
+#include <math/vector3f.h>
 
 
 typedef

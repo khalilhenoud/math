@@ -17,9 +17,9 @@ extern "C" {
 
 #include <math.h>
 #include <string.h>
-#include <math/c/matrix3f.h>
-#include <math/c/matrix4f.h>
-#include <math/c/vector3f.h>
+#include <math/matrix3f.h>
+#include <math/matrix4f.h>
+#include <math/vector3f.h>
 
 
 typedef

@@ -10,7 +10,7 @@
  */
 #include <assert.h>
 #include <math.h>
-#include <math/c/segment.h>
+#include <math/segment.h>
 
 
 inline
