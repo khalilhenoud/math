@@ -58,7 +58,7 @@ inline
 void
 quatf_set_identity(quatf* dst)
 {
-  quat_set_4f(dst, 1.f, 0.f, 0.f, 0.f);
+  quatf_set_4f(dst, 1.f, 0.f, 0.f, 0.f);
 }
 
 inline
