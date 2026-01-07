@@ -167,11 +167,11 @@ get_quatf_axis_angle(const quatf* src, vector3f* axis, float* angle_radian)
     *angle_radian = 0.f;
     vector3f_set_3f(axis, 0.f, 0.f, 1.f);
   } else {
-    float denom = sqrtf(1.f - src->data[QUAT_S] * src->Data[QUAT_S]);
+    float denom = sqrtf(1.f - src->data[QUAT_S] * src->data[QUAT_S]);
     *angle_radian = 2 * acosf(src->data[QUAT_S]);
-    axis->x = src->data[QUAT_X] / denom;
-    axis->y = src->data[QUAT_Y] / denom;
-    axis->z = src->data[QUAT_Z] / denom;
+    axis->data[0] = src->data[QUAT_X] / denom;
+    axis->data[1] = src->data[QUAT_Y] / denom;
+    axis->data[2] = src->data[QUAT_Z] / denom;
   }
 }
 
@@ -203,8 +203,8 @@ float
 dot_product_quatf(const quatf* lhs, const quatf* rhs)
 {
   vector3f v1, v2;
-  vector3f_set_3f(lhs->data[QUAT_X], lhs->data[QUAT_Y], lhs->data[QUAT_Z]);
-  vector3f_set_3f(rhs->data[QUAT_X], rhs->data[QUAT_Y], rhs->data[QUAT_Z]);
+  vector3f_set_3f(&v1, lhs->data[QUAT_X], lhs->data[QUAT_Y], lhs->data[QUAT_Z]);
+  vector3f_set_3f(&v2, rhs->data[QUAT_X], rhs->data[QUAT_Y], rhs->data[QUAT_Z]);
   return lhs->data[QUAT_S] * rhs->data[QUAT_S] + dot_product_v3f(&v1, &v2);
 }
 
@@ -247,7 +247,7 @@ void
 add_set_quatf(quatf* dst, const quatf* rhs)
 {
   for (uint32_t i = 0; i < 4; ++i)
-    dst.data[i] += rhs->data[i];
+    dst->data[i] += rhs->data[i];
 }
 
 inline
@@ -283,18 +283,23 @@ mult_set_quatf(quatf* dst, const quatf* rhs)
 }
 
 inline
+quatf
+inverse_quatf(const quatf* src);
+
+inline
 vector3f
 mult_quatf_v3f(const quatf* quat, const vector3f* vec)
 {
   quatf r, q, qinv, result;
-  vector3f result;
-  quatf_set_4f(&r, 0.f, vec.x, vec.y, vec.z);
+  vector3f resultv;
+  quatf_set_4f(&r, 0.f, vec->data[0], vec->data[1], vec->data[2]);
   q = *quat;
   qinv = inverse_quatf(&q);
   result = mult_quatf(&q, &r);
   result = mult_quatf(&result, &qinv);
-  vector3f_set_3f(&result, result.data[QUAT_X], result.data[QUAT_Y], result.data[QUAT_Z]);
-  return result;
+  vector3f_set_3f(
+    &resultv, result.data[QUAT_X], result.data[QUAT_Y], result.data[QUAT_Z]);
+  return resultv;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
