@@ -38,6 +38,7 @@ extern "C" {
 
 #define IS_ZERO_LP(X) (fabs((X)) <= EPSILON_FLOAT_LOW_PRECISION)
 #define IS_ZERO_MP(X) (fabs((X)) <= EPSILON_FLOAT_MED_PRECISION)
+#define IS_SAME_NP(X, Y) (fabs((X) - (Y)) <= EPSILON_FLOAT_MIN_PRECISION)
 #define IS_SAME_LP(X, Y) (fabs((X) - (Y)) <= EPSILON_FLOAT_LOW_PRECISION)
 #define IS_SAME_MP(X, Y) (fabs((X) - (Y)) <= EPSILON_FLOAT_MED_PRECISION)
 
