@@ -222,6 +222,10 @@ transpose_set_m4f(matrix4f* dst)
 }
 
 inline
+void
+mult_set_m4f_f(matrix4f* dst, float scale);
+
+inline
 matrix4f
 inverse_m4f(const matrix4f* src)
 {
