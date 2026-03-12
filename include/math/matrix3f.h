@@ -67,11 +67,10 @@ add_set_m3f(matrix3f*, const matrix3f*);
 
 inline
 void
-matrix3f_set_axisangle(matrix3f* dst, const vector3f* axis, float alpha_degree)
+matrix3f_set_axisangle(matrix3f* dst, const vector3f* axis, float angle)
 {
   matrix3f s, ss, i;
   vector3f w = normalize_v3f(axis);
-  float angle = alpha_degree / 180.f * (float)K_PI;
 
   matrix3f_set_identity(&s);
   matrix3f_set_identity(&ss);

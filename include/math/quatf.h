@@ -160,18 +160,26 @@ quatf_set_from_rotation_matrix4f(quatf* dst, const matrix4f* from)
 ////////////////////////////////////////////////////////////////////////////////
 inline
 void
-get_quatf_axis_angle(const quatf* src, vector3f* axis, float* angle_radian)
+quatf_set_normalize(quatf *src);
+
+inline
+void
+get_quatf_axis_angle(quatf quat, vector3f *axis, float *angle)
 {
-  if (IS_SAME_LP(fabs(src->data[QUAT_S]), 1.f)) {
-    // no rotation.
-    *angle_radian = 0.f;
-    vector3f_set_3f(axis, 0.f, 0.f, 1.f);
+  float denom;
+  if (quat.data[QUAT_S] > 1)
+    quatf_set_normalize(&quat);
+
+  *angle = 2 * acosf(quat.data[QUAT_S]);
+  denom = sqrtf(1 - quat.data[QUAT_S] * quat.data[QUAT_S]);
+  if (IS_SAME_LP(denom, 0.f)) {
+    axis->data[0] = quat.data[QUAT_X];
+    axis->data[1] = quat.data[QUAT_Y];
+    axis->data[2] = quat.data[QUAT_Z];
   } else {
-    float denom = sqrtf(1.f - src->data[QUAT_S] * src->data[QUAT_S]);
-    *angle_radian = 2 * acosf(src->data[QUAT_S]);
-    axis->data[0] = src->data[QUAT_X] / denom;
-    axis->data[1] = src->data[QUAT_Y] / denom;
-    axis->data[2] = src->data[QUAT_Z] / denom;
+    axis->data[0] = quat.data[QUAT_X] / denom;
+    axis->data[1] = quat.data[QUAT_Y] / denom;
+    axis->data[2] = quat.data[QUAT_Z] / denom;
   }
 }
 
@@ -185,6 +193,19 @@ length_quatf(const quatf* src)
     src->data[QUAT_X] * src->data[QUAT_X] +
     src->data[QUAT_Y] * src->data[QUAT_Y] +
     src->data[QUAT_Z] * src->data[QUAT_Z]);
+}
+
+inline
+void
+mult_set_quatf_f(quatf* dst, float scale);
+
+inline
+void
+quatf_set_normalize(quatf *src)
+{
+  float length = length_quatf(src);
+  if (!IS_SAME_LP(length, 0.f))
+    mult_set_quatf_f(src, 1.f/length);
 }
 
 inline
@@ -342,6 +363,91 @@ void
 conjugate_set_quatf(quatf* dst)
 {
   *dst = conjugate_quatf(dst);
+}
+
+inline
+quatf
+lerp_quatf(quatf src, quatf dst, float lerp_factor)
+{
+  quatf calc = src;
+  quatf neg_src = mult_quatf_f(&src, -1.f);
+  quatf diff = add_quatf(&neg_src, &dst);
+  diff = mult_quatf_f(&diff, lerp_factor);
+  calc = add_quatf(&calc, &diff);
+  return calc;
+}
+
+inline
+quatf
+slerp_quatf(quatf src, quatf dst, float lerp_factor)
+{
+  quatf_set_normalize(&src);
+  quatf_set_normalize(&dst);
+  quatf calc;
+  float dot = dot_product_quatf(&src, &dst);
+
+  // if dot product is negative, use -dst to take the shorter path on the sphere
+  if (dot < 0.f) {
+    mult_set_quatf_f(&dst, -1.f);
+    dot *= -1.f;
+  }
+
+  // default to regular lerp if the quats are closely aligned (avoid div by 0)
+  if (IS_SAME_NP(dot, 1.f)) {
+    calc = lerp_quatf(src, dst, lerp_factor);
+    quatf_set_normalize(&calc);
+    return calc;
+  }
+
+  {
+    float theta_0 = acosf(dot);               // angle between quats
+    float theta = theta_0 * lerp_factor;      // interpolation angle
+    float sin_theta_0 = sinf(theta_0);
+    float sin_theta = sinf(theta);
+    float sin_theta_inv = 1.0f / sin_theta_0;
+
+    float s0 = cosf(theta) - dot * sin_theta * sin_theta_inv;   // src scale
+    float s1 = sin_theta * sin_theta_inv;                       // dst scale
+
+    calc.data[QUAT_S] = s0 * src.data[QUAT_S] + s1 * dst.data[QUAT_S];
+    calc.data[QUAT_X] = s0 * src.data[QUAT_X] + s1 * dst.data[QUAT_X];
+    calc.data[QUAT_Y] = s0 * src.data[QUAT_Y] + s1 * dst.data[QUAT_Y];
+    calc.data[QUAT_Z] = s0 * src.data[QUAT_Z] + s1 * dst.data[QUAT_Z];
+  }
+
+  return calc;
+}
+
+inline
+matrix4f
+quatf_to_matrix4f(quatf src)
+{
+  matrix4f result;
+  quatf_set_normalize(&src);
+
+  {
+    float qx = src.data[QUAT_X];
+    float qy = src.data[QUAT_Y];
+    float qz = src.data[QUAT_Z];
+    float qw = src.data[QUAT_S];
+    float vals[16] = {
+      1.0f - 2.0f * qy * qy - 2.0f * qz * qz,
+      2.0f * qx * qy - 2.0f * qz * qw,
+      2.0f * qx * qz + 2.0f * qy * qw,
+      0.0f,
+      2.0f * qx * qy + 2.0f * qz * qw,
+      1.0f - 2.0f * qx * qx - 2.0f * qz * qz,
+      2.0f * qy * qz - 2.0f * qx * qw,
+      0.0f,
+      2.0f * qx * qz - 2.0f * qy * qw,
+      2.0f * qy * qz + 2.0f * qx * qw,
+      1.0f - 2.0f * qx * qx - 2.0f * qy * qy,
+      0.0f,
+      0.0f, 0.0f, 0.0f, 1.0f
+    };
+    memcpy(result.data, vals, sizeof(vals));
+  }
+  return result;
 }
 
 #ifdef __cplusplus

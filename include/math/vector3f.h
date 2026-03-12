@@ -246,6 +246,16 @@ div_set_v3f(vector3f* dst, float scale)
   dst->data[2] /= scale;
 }
 
+inline
+vector3f
+lerp_v3f(vector3f src, vector3f dst, float lerp_factor)
+{
+  vector3f calc = src;
+  vector3f diff = diff_v3f(&src, &dst);
+  mult_set_v3f(&diff, lerp_factor);
+  add_set_v3f(&calc, &diff);
+  return calc;
+}
 
 #ifdef __cplusplus
 }

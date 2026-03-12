@@ -114,10 +114,10 @@ matrix4f_scale(matrix4f* dst, float x, float y, float z)
 
 inline
 void
-matrix4f_set_axisangle(matrix4f* dst, const vector3f* axis, float alpha_degree)
+matrix4f_set_axisangle(matrix4f* dst, const vector3f* axis, float angle)
 {
   matrix3f tmp;
-  matrix3f_set_axisangle(&tmp, axis, alpha_degree);
+  matrix3f_set_axisangle(&tmp, axis, angle);
   dst->data[M4_RC_00] = tmp.data[M3_RC_00];	dst->data[M4_RC_01] = tmp.data[M3_RC_01];	dst->data[M4_RC_02] = tmp.data[M3_RC_02];	dst->data[M4_RC_03] = 0.f;
   dst->data[M4_RC_10] = tmp.data[M3_RC_10];	dst->data[M4_RC_11] = tmp.data[M3_RC_11];	dst->data[M4_RC_12] = tmp.data[M3_RC_12];	dst->data[M4_RC_13] = 0.f;
   dst->data[M4_RC_20] = tmp.data[M3_RC_20];	dst->data[M4_RC_21] = tmp.data[M3_RC_21];	dst->data[M4_RC_22] = tmp.data[M3_RC_22];	dst->data[M4_RC_23] = 0.f;
