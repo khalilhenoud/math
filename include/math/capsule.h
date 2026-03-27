@@ -29,14 +29,13 @@ struct capsule_t {
   float radius;
 } capsule_t;
 
-// TODO: Provide a variant with transform.
+// TODO: Provide variants with transform.
 inline
 void
 get_capsule_segment(
   const capsule_t *source,
   segment_t *segment);
 
-// TODO: Provide a variant with transform.
 inline
 void
 get_capsule_segment_loose(

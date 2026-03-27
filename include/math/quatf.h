@@ -35,11 +35,10 @@ struct quatf {
   float data[4];
 } quatf;
 
-
 ////////////////////////////////////////////////////////////////////////////////
 inline
 void
-quatf_set_4f(quatf* dst, float s, float x, float y, float z)
+quatf_set_4f(quatf *dst, float s, float x, float y, float z)
 {
   dst->data[QUAT_S] = s;
   dst->data[QUAT_X] = x;
@@ -49,28 +48,28 @@ quatf_set_4f(quatf* dst, float s, float x, float y, float z)
 
 inline
 void
-quatf_copy(quatf* dst, const quatf* src)
+quatf_copy(quatf *dst, const quatf *src)
 {
   memcpy(dst->data, src->data, sizeof(src->data));
 }
 
 inline
 void
-quatf_set_identity(quatf* dst)
+quatf_set_identity(quatf *dst)
 {
   quatf_set_4f(dst, 1.f, 0.f, 0.f, 0.f);
 }
 
 inline
 void
-quatf_set_a4f(quatf* dst, const float *data)
+quatf_set_a4f(quatf *dst, const float *data)
 {
   quatf_set_4f(dst, data[0], data[1], data[2], data[3]);
 }
 
 inline
 void
-quatf_set_from_axis_angle(quatf* dst, const vector3f* axis, float angle_radian)
+quatf_set_from_axis_angle(quatf *dst, const vector3f *axis, float angle_radian)
 {
   float half_angle = angle_radian / 2.f;
   float sin_half = sinf(half_angle);
@@ -86,36 +85,61 @@ quatf_set_from_axis_angle(quatf* dst, const vector3f* axis, float angle_radian)
 // https://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/
 inline
 void
-quatf_set_from_rotation_matrix3f(quatf* dst, const matrix3f* from)
+quatf_set_from_rotation_matrix3f(quatf *dst, const matrix3f *from)
 {
-  float trace = from->data[M3_RC_00] + from->data[M3_RC_11] + from->data[M3_RC_22];
+  float trace =
+    from->data[M3_RC_00] + from->data[M3_RC_11] + from->data[M3_RC_22];
 	if (trace > 0.f) {
 		dst->data[QUAT_S] = sqrtf(trace + 1.f) / 2.f;
-		dst->data[QUAT_X] = (from->data[M3_RC_12] - from->data[M3_RC_21])/(4 * dst->data[QUAT_S]);
-		dst->data[QUAT_Y] = (from->data[M3_RC_20] - from->data[M3_RC_02])/(4 * dst->data[QUAT_S]);
-		dst->data[QUAT_Z] = (from->data[M3_RC_01] - from->data[M3_RC_10])/(4 * dst->data[QUAT_S]);
+		dst->data[QUAT_X] =
+      (from->data[M3_RC_12] - from->data[M3_RC_21])/(4 * dst->data[QUAT_S]);
+		dst->data[QUAT_Y] =
+      (from->data[M3_RC_20] - from->data[M3_RC_02])/(4 * dst->data[QUAT_S]);
+		dst->data[QUAT_Z] =
+      (from->data[M3_RC_01] - from->data[M3_RC_10])/(4 * dst->data[QUAT_S]);
 	} else {
     if (
       (from->data[M3_RC_00] >= from->data[M3_RC_11]) &&
       (from->data[M3_RC_00] >= from->data[M3_RC_22])) {
-      dst->data[QUAT_X] = sqrtf(from->data[M3_RC_00] - from->data[M3_RC_11] - from->data[M3_RC_22] + 1.f) / 2.f;
-      dst->data[QUAT_S] = (from->data[M3_RC_12] - from->data[M3_RC_21])/(4 * dst->data[QUAT_X]);
-			dst->data[QUAT_Y] = (from->data[M3_RC_01] + from->data[M3_RC_10])/(4 * dst->data[QUAT_X]);
-			dst->data[QUAT_Z] = (from->data[M3_RC_02] + from->data[M3_RC_20])/(4 * dst->data[QUAT_X]);
+      dst->data[QUAT_X] =
+        sqrtf(
+          from->data[M3_RC_00] -
+          from->data[M3_RC_11] -
+          from->data[M3_RC_22] + 1.f) / 2.f;
+      dst->data[QUAT_S] =
+        (from->data[M3_RC_12] - from->data[M3_RC_21])/(4 * dst->data[QUAT_X]);
+			dst->data[QUAT_Y] =
+        (from->data[M3_RC_01] + from->data[M3_RC_10])/(4 * dst->data[QUAT_X]);
+			dst->data[QUAT_Z] =
+        (from->data[M3_RC_02] + from->data[M3_RC_20])/(4 * dst->data[QUAT_X]);
 		} else if (
       (from->data[M3_RC_11] >= from->data[M3_RC_00]) &&
       (from->data[M3_RC_11] >= from->data[M3_RC_22])) {
-      dst->data[QUAT_Y] = sqrtf(from->data[M3_RC_11] - from->data[M3_RC_00] - from->data[M3_RC_22] + 1.f) / 2.f;
-      dst->data[QUAT_S] = (from->data[M3_RC_20] - from->data[M3_RC_02])/(4 * dst->data[QUAT_Y]);
-			dst->data[QUAT_X] = (from->data[M3_RC_01] + from->data[M3_RC_10])/(4 * dst->data[QUAT_Y]);
-			dst->data[QUAT_Z] = (from->data[M3_RC_12] + from->data[M3_RC_21])/(4 * dst->data[QUAT_Y]);
+      dst->data[QUAT_Y] =
+        sqrtf(
+          from->data[M3_RC_11] -
+          from->data[M3_RC_00] -
+          from->data[M3_RC_22] + 1.f) / 2.f;
+      dst->data[QUAT_S] =
+        (from->data[M3_RC_20] - from->data[M3_RC_02])/(4 * dst->data[QUAT_Y]);
+			dst->data[QUAT_X] =
+        (from->data[M3_RC_01] + from->data[M3_RC_10])/(4 * dst->data[QUAT_Y]);
+			dst->data[QUAT_Z] =
+        (from->data[M3_RC_12] + from->data[M3_RC_21])/(4 * dst->data[QUAT_Y]);
 		} else if (
       (from->data[M3_RC_22] >= from->data[M3_RC_00]) &&
       (from->data[M3_RC_22] >= from->data[M3_RC_11])) {
-      dst->data[QUAT_Z] = sqrtf(from->data[M3_RC_22] - from->data[M3_RC_00] - from->data[M3_RC_11] + 1.f) / 2.f;
-      dst->data[QUAT_S] = (from->data[M3_RC_01] - from->data[M3_RC_10])/(4 * dst->data[QUAT_Z]);
-			dst->data[QUAT_X] = (from->data[M3_RC_02] + from->data[M3_RC_20])/(4 * dst->data[QUAT_Z]);
-			dst->data[QUAT_Y] = (from->data[M3_RC_12] + from->data[M3_RC_21])/(4 * dst->data[QUAT_Z]);
+      dst->data[QUAT_Z] =
+        sqrtf(
+          from->data[M3_RC_22] -
+          from->data[M3_RC_00] -
+          from->data[M3_RC_11] + 1.f) / 2.f;
+      dst->data[QUAT_S] =
+        (from->data[M3_RC_01] - from->data[M3_RC_10])/(4 * dst->data[QUAT_Z]);
+			dst->data[QUAT_X] =
+        (from->data[M3_RC_02] + from->data[M3_RC_20])/(4 * dst->data[QUAT_Z]);
+			dst->data[QUAT_Y] =
+        (from->data[M3_RC_12] + from->data[M3_RC_21])/(4 * dst->data[QUAT_Z]);
 		}
   }
 }
@@ -123,42 +147,66 @@ quatf_set_from_rotation_matrix3f(quatf* dst, const matrix3f* from)
 // @see quatf_set_from_rotation_matrix3f().
 inline
 void
-quatf_set_from_rotation_matrix4f(quatf* dst, const matrix4f* from)
+quatf_set_from_rotation_matrix4f(quatf *dst, const matrix4f *from)
 {
-  float trace = from->data[M4_RC_00] + from->data[M4_RC_11] + from->data[M4_RC_22];
+  float trace =
+    from->data[M4_RC_00] + from->data[M4_RC_11] + from->data[M4_RC_22];
 	if (trace > 0.f) {
 		dst->data[QUAT_S] = sqrtf(trace + 1.f) / 2.f;
-		dst->data[QUAT_X] = (from->data[M4_RC_12] - from->data[M4_RC_21])/(4 * dst->data[QUAT_S]);
-		dst->data[QUAT_Y] = (from->data[M4_RC_20] - from->data[M4_RC_02])/(4 * dst->data[QUAT_S]);
-		dst->data[QUAT_Z] = (from->data[M4_RC_01] - from->data[M4_RC_10])/(4 * dst->data[QUAT_S]);
+		dst->data[QUAT_X] =
+      (from->data[M4_RC_12] - from->data[M4_RC_21])/(4 * dst->data[QUAT_S]);
+		dst->data[QUAT_Y] =
+      (from->data[M4_RC_20] - from->data[M4_RC_02])/(4 * dst->data[QUAT_S]);
+		dst->data[QUAT_Z] =
+      (from->data[M4_RC_01] - from->data[M4_RC_10])/(4 * dst->data[QUAT_S]);
 	} else {
     if (
       (from->data[M4_RC_00] >= from->data[M4_RC_11]) &&
       (from->data[M4_RC_00] >= from->data[M4_RC_22])) {
-      dst->data[QUAT_X] = sqrtf(from->data[M4_RC_00] - from->data[M4_RC_11] - from->data[M4_RC_22] + 1.f) / 2.f;
-      dst->data[QUAT_S] = (from->data[M4_RC_12] - from->data[M4_RC_21])/(4 * dst->data[QUAT_X]);
-			dst->data[QUAT_Y] = (from->data[M4_RC_01] + from->data[M4_RC_10])/(4 * dst->data[QUAT_X]);
-			dst->data[QUAT_Z] = (from->data[M4_RC_02] + from->data[M4_RC_20])/(4 * dst->data[QUAT_X]);
+      dst->data[QUAT_X] =
+        sqrtf(
+          from->data[M4_RC_00] -
+          from->data[M4_RC_11] -
+          from->data[M4_RC_22] + 1.f) / 2.f;
+      dst->data[QUAT_S] =
+        (from->data[M4_RC_12] - from->data[M4_RC_21])/(4 * dst->data[QUAT_X]);
+			dst->data[QUAT_Y] =
+        (from->data[M4_RC_01] + from->data[M4_RC_10])/(4 * dst->data[QUAT_X]);
+			dst->data[QUAT_Z] =
+        (from->data[M4_RC_02] + from->data[M4_RC_20])/(4 * dst->data[QUAT_X]);
 		} else if (
       (from->data[M4_RC_11] >= from->data[M4_RC_00]) &&
       (from->data[M4_RC_11] >= from->data[M4_RC_22])) {
-      dst->data[QUAT_Y] = sqrtf(from->data[M4_RC_11] - from->data[M4_RC_00] - from->data[M4_RC_22] + 1.f) / 2.f;
-      dst->data[QUAT_S] = (from->data[M4_RC_20] - from->data[M4_RC_02])/(4 * dst->data[QUAT_Y]);
-			dst->data[QUAT_X] = (from->data[M4_RC_01] + from->data[M4_RC_10])/(4 * dst->data[QUAT_Y]);
-			dst->data[QUAT_Z] = (from->data[M4_RC_12] + from->data[M4_RC_21])/(4 * dst->data[QUAT_Y]);
+      dst->data[QUAT_Y] =
+        sqrtf(
+          from->data[M4_RC_11] -
+          from->data[M4_RC_00] -
+          from->data[M4_RC_22] + 1.f) / 2.f;
+      dst->data[QUAT_S] =
+        (from->data[M4_RC_20] - from->data[M4_RC_02])/(4 * dst->data[QUAT_Y]);
+			dst->data[QUAT_X] =
+        (from->data[M4_RC_01] + from->data[M4_RC_10])/(4 * dst->data[QUAT_Y]);
+			dst->data[QUAT_Z] =
+        (from->data[M4_RC_12] + from->data[M4_RC_21])/(4 * dst->data[QUAT_Y]);
 		} else if (
       (from->data[M4_RC_22] >= from->data[M4_RC_00]) &&
       (from->data[M4_RC_22] >= from->data[M4_RC_11])) {
-      dst->data[QUAT_Z] = sqrtf(from->data[M4_RC_22] - from->data[M4_RC_00] - from->data[M4_RC_11] + 1.f) / 2.f;
-      dst->data[QUAT_S] = (from->data[M4_RC_01] - from->data[M4_RC_10])/(4 * dst->data[QUAT_Z]);
-			dst->data[QUAT_X] = (from->data[M4_RC_02] + from->data[M4_RC_20])/(4 * dst->data[QUAT_Z]);
-			dst->data[QUAT_Y] = (from->data[M4_RC_12] + from->data[M4_RC_21])/(4 * dst->data[QUAT_Z]);
+      dst->data[QUAT_Z] =
+        sqrtf(
+          from->data[M4_RC_22] -
+          from->data[M4_RC_00] -
+          from->data[M4_RC_11] + 1.f) / 2.f;
+      dst->data[QUAT_S] =
+        (from->data[M4_RC_01] - from->data[M4_RC_10])/(4 * dst->data[QUAT_Z]);
+			dst->data[QUAT_X] =
+        (from->data[M4_RC_02] + from->data[M4_RC_20])/(4 * dst->data[QUAT_Z]);
+			dst->data[QUAT_Y] =
+        (from->data[M4_RC_12] + from->data[M4_RC_21])/(4 * dst->data[QUAT_Z]);
 		}
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-inline
 void
 quatf_set_normalize(quatf *src);
 
@@ -186,7 +234,7 @@ get_quatf_axis_angle(quatf quat, vector3f *axis, float *angle)
 ////////////////////////////////////////////////////////////////////////////////
 inline
 float
-length_quatf(const quatf* src)
+length_quatf(const quatf *src)
 {
   return sqrtf(
     src->data[QUAT_S] * src->data[QUAT_S] +
@@ -195,9 +243,8 @@ length_quatf(const quatf* src)
     src->data[QUAT_Z] * src->data[QUAT_Z]);
 }
 
-inline
 void
-mult_set_quatf_f(quatf* dst, float scale);
+mult_set_quatf_f(quatf *dst, float scale);
 
 inline
 void
@@ -210,7 +257,7 @@ quatf_set_normalize(quatf *src)
 
 inline
 float
-length_squared_quatf(const quatf* src)
+length_squared_quatf(const quatf *src)
 {
   return
     src->data[QUAT_S] * src->data[QUAT_S] +
@@ -221,7 +268,7 @@ length_squared_quatf(const quatf* src)
 
 inline
 float
-dot_product_quatf(const quatf* lhs, const quatf* rhs)
+dot_product_quatf(const quatf *lhs, const quatf *rhs)
 {
   vector3f v1, v2;
   vector3f_set_3f(&v1, lhs->data[QUAT_X], lhs->data[QUAT_Y], lhs->data[QUAT_Z]);
@@ -232,7 +279,7 @@ dot_product_quatf(const quatf* lhs, const quatf* rhs)
 ////////////////////////////////////////////////////////////////////////////////
 inline
 quatf
-mult_quatf_f(const quatf* src, float scale)
+mult_quatf_f(const quatf *src, float scale)
 {
   quatf dst = *src;
   dst.data[QUAT_S] *= scale;
@@ -244,7 +291,7 @@ mult_quatf_f(const quatf* src, float scale)
 
 inline
 void
-mult_set_quatf_f(quatf* dst, float scale)
+mult_set_quatf_f(quatf *dst, float scale)
 {
   dst->data[QUAT_S] *= scale;
   dst->data[QUAT_X] *= scale;
@@ -254,7 +301,7 @@ mult_set_quatf_f(quatf* dst, float scale)
 
 inline
 quatf
-add_quatf(const quatf* lhs, const quatf* rhs)
+add_quatf(const quatf *lhs, const quatf *rhs)
 {
   quatf dst = *lhs;
   for (uint32_t i = 0; i < 4; ++i)
@@ -265,7 +312,7 @@ add_quatf(const quatf* lhs, const quatf* rhs)
 
 inline
 void
-add_set_quatf(quatf* dst, const quatf* rhs)
+add_set_quatf(quatf *dst, const quatf *rhs)
 {
   for (uint32_t i = 0; i < 4; ++i)
     dst->data[i] += rhs->data[i];
@@ -273,15 +320,16 @@ add_set_quatf(quatf* dst, const quatf* rhs)
 
 inline
 quatf
-mult_quatf(const quatf* lhs, const quatf* rhs)
+mult_quatf(const quatf *lhs, const quatf *rhs)
 {
   quatf result;
   vector3f v0, v1, v2;
   vector3f_set_a3f(&v1, lhs->data + QUAT_X);
   vector3f_set_a3f(&v2, rhs->data + QUAT_X);
-  result.data[QUAT_S] = lhs->data[QUAT_S] * rhs->data[QUAT_S] - dot_product_v3f(&v1, &v2);
+  result.data[QUAT_S] =
+    lhs->data[QUAT_S] * rhs->data[QUAT_S] - dot_product_v3f(&v1, &v2);
+
   {
-    // calc v0.
     vector3f vb, vc;
     v0 = mult_v3f(&v2, lhs->data[QUAT_S]);
     vb = mult_v3f(&v1, rhs->data[QUAT_S]);
@@ -297,19 +345,18 @@ mult_quatf(const quatf* lhs, const quatf* rhs)
 
 inline
 void
-mult_set_quatf(quatf* dst, const quatf* rhs)
+mult_set_quatf(quatf *dst, const quatf *rhs)
 {
   quatf result = mult_quatf(dst, rhs);
   *dst = result;
 }
 
-inline
 quatf
-inverse_quatf(const quatf* src);
+inverse_quatf(const quatf *src);
 
 inline
 vector3f
-mult_quatf_v3f(const quatf* quat, const vector3f* vec)
+mult_quatf_v3f(const quatf *quat, const vector3f *vec)
 {
   quatf r, q, qinv, result;
   vector3f resultv;
@@ -326,7 +373,7 @@ mult_quatf_v3f(const quatf* quat, const vector3f* vec)
 ////////////////////////////////////////////////////////////////////////////////
 inline
 quatf
-inverse_quatf(const quatf* src)
+inverse_quatf(const quatf *src)
 {
   quatf result;
   float l = length_squared_quatf(src);
@@ -339,7 +386,7 @@ inverse_quatf(const quatf* src)
 
 inline
 void
-inverse_set_quatf(quatf* dst)
+inverse_set_quatf(quatf *dst)
 {
   *dst = inverse_quatf(dst);
 }
@@ -348,7 +395,7 @@ inverse_set_quatf(quatf* dst)
 // quaternion that represents only rotations is guaranteed to be unitary.
 inline
 quatf
-conjugate_quatf(const quatf* src)
+conjugate_quatf(const quatf *src)
 {
   quatf result;
   result.data[QUAT_S] = src->data[QUAT_S];
@@ -360,7 +407,7 @@ conjugate_quatf(const quatf* src)
 
 inline
 void
-conjugate_set_quatf(quatf* dst)
+conjugate_set_quatf(quatf *dst)
 {
   *dst = conjugate_quatf(dst);
 }

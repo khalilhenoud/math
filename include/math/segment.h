@@ -28,21 +28,21 @@ typedef segment_t line_t;
 inline
 point3f
 closest_point_on_segment(
-  const point3f* point,
-  const segment_t* target);
+  const point3f *point,
+  const segment_t *target);
 
 inline
 point3f
 closest_point_on_segment_loose(
-  const point3f* point,
-  const point3f* a,
-  const point3f* b);
+  const point3f *point,
+  const point3f *a,
+  const point3f *b);
 
 inline
 float
 get_point_distance_to_line(
-  const point3f* point,
-  const line_t* target);
+  const point3f *point,
+  const line_t *target);
 
 #include "segment.impl"
 

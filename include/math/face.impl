@@ -1,5 +1,5 @@
 /**
- * @file face.c
+ * @file face.impl
  * @author khalilhenoud@gmail.com
  * @brief
  * @version 0.1
@@ -16,7 +16,7 @@
 inline
 face_t
 get_extended_face(
-  const face_t* face,
+  const face_t *face,
   float radius)
 {
   assert(face);
